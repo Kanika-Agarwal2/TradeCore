@@ -1,0 +1,179 @@
+.login-page {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f8f9fa;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* Login Card */
+
+.login-card {
+  width: 100%;
+  max-width: 600px;
+
+  background-color: white;
+
+  padding: 45px 55px;
+  box-sizing: border-box;
+
+  border-radius: 6px;
+
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+/* Heading */
+
+.login-card h1 {
+  text-align: center;
+
+  font-size: 32px;
+  font-weight: 500;
+
+  color: #424242;
+
+  margin: 0 0 10px;
+}
+
+.login-subtitle {
+  text-align: center;
+
+  color: #777;
+
+  font-size: 16px;
+
+  margin: 0 0 35px;
+}
+/* Inputs */
+
+.login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-card input {
+  width: 100%;
+
+  padding: 15px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #ddd;
+  border-radius: 4px;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+.login-card input:focus {
+  border-color: #ff5722;
+}
+
+
+/* Login Button */
+
+.login-card button {
+  width: 100%;
+
+  padding: 15px;
+
+  margin-top: 2px;
+
+  background-color: #ff5722;
+  color: white;
+
+  border: none;
+  border-radius: 4px;
+
+  font-size: 17px;
+
+  cursor: pointer;
+}
+
+.login-card button:hover {
+  background-color: #e64a19;
+}
+
+.login-card button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+.login-error {
+  color: #e53935;
+
+  text-align: center;
+
+  font-size: 14px;
+
+  margin: -5px 0 0;
+}
+.forgot-password {
+  text-align: center;
+
+  margin-top: 22px;
+}
+
+.forgot-password a {
+  color: #777;
+
+  text-decoration: none;
+
+  font-size: 14px;
+}
+
+.forgot-password a:hover {
+  color: #387ed1;
+}
+
+
+/* Signup */
+
+.signup-text {
+  margin: 25px 0 8px;
+
+  color: #777;
+
+  font-size: 15px;
+
+  text-align: center;
+}
+
+.signup-text a {
+  color: #387ed1;
+
+  text-decoration: none;
+}
+
+.signup-text a:hover {
+  text-decoration: underline;
+}
+.demo-text {
+  margin: 0;
+
+  color: #999;
+
+  font-size: 13px;
+
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .login-page {
+    padding: 30px 15px;
+  }
+
+  .login-card {
+    padding: 35px 25px;
+  }
+
+  .login-card h1 {
+    font-size: 28px;
+  }
+}

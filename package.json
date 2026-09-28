@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.3.8"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  },
+  "scripts": {
+    "frontend": "npm start --prefix frontend",
+    "dashboard": "npm start --prefix dashboard",
+    "backend": "npm start --prefix backend",
+    "dev": "concurrently \"npm run frontend\" \"npm run dashboard\" \"npm run backend\""
+  }
+}
