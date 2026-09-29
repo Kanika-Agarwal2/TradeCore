@@ -1,4 +1,4 @@
-# TradeCore — Full-Stack Stock Trading Platform
+# 📈 TradeCore — Full-Stack Stock Trading Platform
 
 TradeCore is a full-stack stock trading simulation platform built with the MERN stack. It combines secure authentication, RESTful APIs, persistent portfolio state, simulated order execution, funds management, and portfolio performance analytics in a modular web application.
 
