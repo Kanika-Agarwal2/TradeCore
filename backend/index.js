@@ -553,8 +553,8 @@ mongoose.connect(uri)
     .then(() => {
         console.log("DB connected successfully!");
 
-        app.listen(PORT, () => {
-            console.log(`App started on port ${PORT}`);
+        app.listen(PORT, "0.0.0.0", () => {
+          console.log(`App started on port ${PORT}`);
         });
     })
     .catch((err) => {
