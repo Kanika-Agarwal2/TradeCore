@@ -17,18 +17,11 @@ function Education() {
             development.
           </p>
 
-          <a className="aBtn" href="">
-            Explore TradeCore <i class="fa-solid fa-arrow-right-long"></i>
-          </a>
 
           <p className="mt-5">
             Understand how authentication, orders, holdings, funds, and
             portfolio calculations work together in a full-stack application.
           </p>
-
-          <a className="aBtn" href="">
-            Explore the platform <i class="fa-solid fa-arrow-right-long"></i>
-          </a>
         </div>
       </div>
     </div>

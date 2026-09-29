@@ -6,20 +6,26 @@ import GeneralContext from "./GeneralContext";
 
 import "./BuyActionWindow.css";
 
-const BuyActionWindow = ({ uid }) => {
+const BuyActionWindow = ({ uid, price }) => {
   const [stockQuantity, setStockQuantity] = useState(1);
-  const [stockPrice, setStockPrice] = useState("");
+  const [stockPrice, setStockPrice] = useState(price);
 
   const generalContext = useContext(GeneralContext);
 
   const handleBuyClick = async () => {
     try {
-      const response = await axios.post("http://localhost:3002/newOrder", {
-        name: uid,
-        qty: stockQuantity,
-        price: stockPrice,
-        mode: "BUY",
-      });
+      const response = await axios.post(
+        "http://localhost:3002/newOrder",
+        {
+          name: uid,
+          qty: stockQuantity,
+          price: stockPrice,
+          mode: "BUY",
+        },
+        {
+          withCredentials: true,
+        },
+      );
 
       console.log(response.data);
 
@@ -59,10 +65,8 @@ const BuyActionWindow = ({ uid }) => {
               type="number"
               name="price"
               id="price"
-              min="0"
-              step="0.05"
-              onChange={(e) => setStockPrice(e.target.value)}
               value={stockPrice}
+              readOnly
             />
           </fieldset>
         </div>

@@ -11,7 +11,9 @@ const Funds = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/allFunds")
+      .get("http://localhost:3002/allFunds", {
+        withCredentials: true,
+      })
       .then((res) => {
         console.log(res.data);
         setFunds(res.data);
@@ -82,6 +84,9 @@ const Funds = () => {
                       "http://localhost:3002/addFunds",
                       {
                         amount: Number(amount),
+                      },
+                      {
+                        withCredentials: true,
                       },
                     );
 
@@ -172,6 +177,9 @@ const Funds = () => {
                       "http://localhost:3002/withdrawFunds",
                       {
                         amount: Number(amount),
+                      },
+                      {
+                        withCredentials: true,
                       },
                     );
 

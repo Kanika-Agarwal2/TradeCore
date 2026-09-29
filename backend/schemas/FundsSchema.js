@@ -1,6 +1,13 @@
 const { Schema } = require("mongoose");
 
 const FundsSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+    unique: true,
+  },
+
   availableCash: {
     type: Number,
     required: true,

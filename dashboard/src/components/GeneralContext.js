@@ -4,7 +4,7 @@ import SellActionWindow from "./SellActionWindow";
 
 const GeneralContext = React.createContext({
   username: "",
-  openBuyWindow: (uid) => {},
+  openBuyWindow: (uid, price) => {},
   closeBuyWindow: () => {},
   openSellWindow: (uid) => {},
   closeSellWindow: () => {},
@@ -16,7 +16,7 @@ export const GeneralContextProvider = (props) => {
   const [isBuyWindowOpen, setIsBuyWindowOpen] = useState(false);
   const [isSellWindowOpen, setIsSellWindowOpen] = useState(false);
   const [selectedStockUID, setSelectedStockUID] = useState("");
-
+  const [selectedStockPrice, setSelectedStockPrice] = useState("");
   useEffect(() => {
     fetch("http://localhost:3002/verify", {
       method: "GET",
@@ -33,16 +33,18 @@ export const GeneralContextProvider = (props) => {
       });
   }, []);
 
-  const handleOpenBuyWindow = (uid) => {
-    setIsBuyWindowOpen(true);
-    setIsSellWindowOpen(false);
-    setSelectedStockUID(uid);
-  };
+const handleOpenBuyWindow = (uid, price) => {
+  setIsBuyWindowOpen(true);
+  setIsSellWindowOpen(false);
+  setSelectedStockUID(uid);
+  setSelectedStockPrice(price);
+};
 
-  const handleCloseBuyWindow = () => {
-    setIsBuyWindowOpen(false);
-    setSelectedStockUID("");
-  };
+const handleCloseBuyWindow = () => {
+  setIsBuyWindowOpen(false);
+  setSelectedStockUID("");
+  setSelectedStockPrice("");
+};
 
   const handleOpenSellWindow = (uid) => {
     setIsSellWindowOpen(true);
@@ -69,7 +71,9 @@ export const GeneralContextProvider = (props) => {
     >
       {props.children}
 
-      {isBuyWindowOpen && <BuyActionWindow uid={selectedStockUID} />}
+      {isBuyWindowOpen && (
+        <BuyActionWindow uid={selectedStockUID} price={selectedStockPrice} />
+      )}
 
       {isSellWindowOpen && <SellActionWindow uid={selectedStockUID} />}
     </GeneralContext.Provider>

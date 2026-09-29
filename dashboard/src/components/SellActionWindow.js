@@ -18,12 +18,18 @@ const SellActionWindow = ({ uid }) => {
     }
 
     try {
-      const response = await axios.post("http://localhost:3002/newOrder", {
-        name: uid,
-        qty: stockQuantity,
-        price: stockPrice,
-        mode: "SELL",
-      });
+const response = await axios.post(
+  "http://localhost:3002/newOrder",
+  {
+    name: uid,
+    qty: stockQuantity,
+    price: stockPrice,
+    mode: "SELL",
+  },
+  {
+    withCredentials: true,
+  },
+);
 
       console.log(response.data);
 

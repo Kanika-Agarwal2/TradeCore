@@ -12,8 +12,12 @@ const Summary = () => {
     const fetchSummaryData = async () => {
       try {
         const [fundsResponse, holdingsResponse] = await Promise.all([
-          axios.get("http://localhost:3002/allFunds"),
-          axios.get("http://localhost:3002/allHoldings"),
+          axios.get("http://localhost:3002/allFunds", {
+            withCredentials: true,
+          }),
+          axios.get("http://localhost:3002/allHoldings", {
+            withCredentials: true,
+          }),
         ]);
 
         setFunds(fundsResponse.data);

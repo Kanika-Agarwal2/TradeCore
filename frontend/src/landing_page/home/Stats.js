@@ -46,8 +46,8 @@ function Stats() {
               Explore TradeCore <i class="fa-solid fa-arrow-right-long"></i>
             </a>
 
-            <a href="" className="fs-5 aBtn">
-              Open dashboard <i class="fa-solid fa-arrow-right-long"></i>
+            <a href="http://localhost:3001" className="fs-5 aBtn">
+              Open dashboard <i className="fa-solid fa-arrow-right-long"></i>
             </a>
           </div>
         </div>

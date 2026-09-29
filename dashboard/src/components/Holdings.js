@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios, { all } from "axios";
+import axios from "axios";
 import { VerticalGraph } from "./VerticalGraph";
 // import { holdings } from "../data/data";
 
@@ -7,10 +7,14 @@ const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3002/allHoldings").then((res) => {
-      console.log(res.data);
-      setAllHoldings(res.data);
-    });
+    axios
+      .get("http://localhost:3002/allHoldings", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setAllHoldings(res.data);
+      });
   }, []);
 
   // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
@@ -87,18 +91,41 @@ const Holdings = () => {
       <div className="row">
         <div className="col">
           <h5>
-            29,875.<span>55</span>{" "}
+            {allHoldings
+              .reduce((total, stock) => total + stock.avg * stock.qty, 0)
+              .toFixed(2)}
           </h5>
           <p>Total investment</p>
         </div>
+
         <div className="col">
           <h5>
-            31,428.<span>95</span>{" "}
+            {allHoldings
+              .reduce((total, stock) => total + stock.price * stock.qty, 0)
+              .toFixed(2)}
           </h5>
           <p>Current value</p>
         </div>
+
         <div className="col">
-          <h5>1,553.40 (+5.20%)</h5>
+          <h5>
+            {(() => {
+              const investment = allHoldings.reduce(
+                (total, stock) => total + stock.avg * stock.qty,
+                0,
+              );
+
+              const currentValue = allHoldings.reduce(
+                (total, stock) => total + stock.price * stock.qty,
+                0,
+              );
+
+              const pnl = currentValue - investment;
+              const pnlPercent = investment ? (pnl / investment) * 100 : 0;
+
+              return `${pnl.toFixed(2)} (${pnlPercent.toFixed(2)}%)`;
+            })()}
+          </h5>
           <p>P&L</p>
         </div>
       </div>

@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const { authMiddleware } = require("./middleware/authMiddleware");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -199,16 +199,30 @@ app.use("/", authRoutes);
   //res.send("Done!");
 //});
 
-app.get("/allHoldings", async (req, res) => {
-  let allHoldings = await HoldingsModel.find({});
-  res.json(allHoldings);
-});
-app.get("/allFunds", async (req, res) => {
+app.get("/allHoldings", authMiddleware, async (req, res) => {
   try {
-    let funds = await FundsModel.findOne({});
+    const allHoldings = await HoldingsModel.find({
+      user: req.user._id,
+    });
+
+    res.json(allHoldings);
+  } catch (error) {
+    console.log("Holdings fetch error:", error);
+
+    res.status(500).json({
+      message: "Unable to fetch holdings",
+    });
+  }
+});
+app.get("/allFunds", authMiddleware, async (req, res) => {
+  try {
+    let funds = await FundsModel.findOne({
+      user: req.user._id,
+    });
 
     if (!funds) {
       funds = new FundsModel({
+        user: req.user._id,
         availableCash: 10000,
         usedMargin: 0,
         openingBalance: 10000,
@@ -226,7 +240,7 @@ app.get("/allFunds", async (req, res) => {
     });
   }
 });
-app.post("/addFunds", async (req, res) => {
+app.post("/addFunds", authMiddleware, async (req, res) => {
   try {
     const { amount } = req.body;
 
@@ -236,7 +250,9 @@ app.post("/addFunds", async (req, res) => {
       });
     }
 
-    const funds = await FundsModel.findOne({});
+    const funds = await FundsModel.findOne({
+  user: req.user._id,
+});
 
     if (!funds) {
       return res.status(500).json({
@@ -261,7 +277,7 @@ app.post("/addFunds", async (req, res) => {
     });
   }
 });
-app.post("/withdrawFunds", async (req, res) => {
+app.post("/withdrawFunds", authMiddleware, async (req, res) => {
   try {
     const { amount } = req.body;
 
@@ -273,7 +289,9 @@ app.post("/withdrawFunds", async (req, res) => {
 
     const withdrawAmount = Number(amount);
 
-    const funds = await FundsModel.findOne({});
+    const funds = await FundsModel.findOne({
+      user: req.user._id,
+    });
 
     if (!funds) {
       return res.status(500).json({
@@ -303,9 +321,11 @@ app.post("/withdrawFunds", async (req, res) => {
     });
   }
 });
-app.get("/allOrders", async (req, res) => {
+app.get("/allOrders", authMiddleware, async (req, res) => {
   try {
-    const allOrders = await OrdersModel.find({}).sort({ _id: -1 });
+    const allOrders = await OrdersModel.find({
+      user: req.user._id,
+    }).sort({ _id: -1 });
 
     res.status(200).json(allOrders);
   } catch (error) {
@@ -316,12 +336,14 @@ app.get("/allOrders", async (req, res) => {
     });
   }
 });
-app.get("/allPositions", async (req, res) => {
-  let allPositions = await PositionsModel.find({});
+app.get("/allPositions", authMiddleware, async (req, res) => {
+  const allPositions = await PositionsModel.find({
+    user: req.user._id,
+  });
+
   res.json(allPositions);
 });
-
-app.post("/newOrder", async (req, res) => {
+app.post("/newOrder", authMiddleware, async (req, res) => {
   try {
     const { name, qty, price, mode } = req.body;
 
@@ -339,24 +361,27 @@ app.post("/newOrder", async (req, res) => {
         message: "Quantity and price must be greater than 0",
       });
     }
-//BUY
+    //BUY
     if (mode === "BUY") {
       const totalCost = quantity * orderPrice;
 
-let funds = await FundsModel.findOne({});
+      let funds = await FundsModel.findOne({
+        user: req.user._id,
+      });
 
-if (!funds) {
-  return res.status(500).json({
-    message: "Funds account not found",
-  });
-}
+      if (!funds) {
+        return res.status(500).json({
+          message: "Funds account not found",
+        });
+      }
 
-if (funds.availableCash < totalCost) {
-  return res.status(400).json({
-    message: `Insufficient funds. Available cash: ₹${funds.availableCash.toFixed(2)}`,
-  });
-}
+      if (funds.availableCash < totalCost) {
+        return res.status(400).json({
+          message: `Insufficient funds. Available cash: ₹${funds.availableCash.toFixed(2)}`,
+        });
+      }
       const newOrder = new OrdersModel({
+        user: req.user._id,
         name,
         qty: quantity,
         price: orderPrice,
@@ -367,7 +392,10 @@ if (funds.availableCash < totalCost) {
       funds.availableCash -= totalCost;
       funds.usedMargin += totalCost;
       await funds.save();
-      const existingHolding = await HoldingsModel.findOne({ name });
+      const existingHolding = await HoldingsModel.findOne({
+        user: req.user._id,
+        name,
+      });
 
       if (existingHolding) {
         const oldQty = existingHolding.qty;
@@ -375,8 +403,7 @@ if (funds.availableCash < totalCost) {
 
         const newQty = oldQty + quantity;
 
-        const newAvg =
-          (oldQty * oldAvg + quantity * orderPrice) / newQty;
+        const newAvg = (oldQty * oldAvg + quantity * orderPrice) / newQty;
 
         existingHolding.qty = newQty;
         existingHolding.avg = newAvg;
@@ -385,6 +412,7 @@ if (funds.availableCash < totalCost) {
         await existingHolding.save();
       } else {
         const newHolding = new HoldingsModel({
+          user: req.user._id,
           name,
           qty: quantity,
           avg: orderPrice,
@@ -400,77 +428,81 @@ if (funds.availableCash < totalCost) {
         message: "Buy order placed successfully",
       });
     }
-//SELL
-if (mode === "SELL") {
-  const existingHolding = await HoldingsModel.findOne({ name });
+    //SELL
+    if (mode === "SELL") {
+      const existingHolding = await HoldingsModel.findOne({
+        user: req.user._id,
+        name,
+      });
 
-  if (!existingHolding) {
-    return res.status(400).json({
-      message: "You don't own this stock",
-    });
-  }
+      if (!existingHolding) {
+        return res.status(400).json({
+          message: "You don't own this stock",
+        });
+      }
 
-  if (existingHolding.qty < quantity) {
-    return res.status(400).json({
-      message: `Insufficient quantity. You only own ${existingHolding.qty} shares.`,
-    });
-  }
+      if (existingHolding.qty < quantity) {
+        return res.status(400).json({
+          message: `Insufficient quantity. You only own ${existingHolding.qty} shares.`,
+        });
+      }
 
-  const newOrder = new OrdersModel({
-    name,
-    qty: quantity,
-    price: orderPrice,
-    mode,
-  });
+      const newOrder = new OrdersModel({
+        user: req.user._id,
+        name,
+        qty: quantity,
+        price: orderPrice,
+        mode,
+      });
 
-  await newOrder.save();
+      await newOrder.save();
 
-  // Money received from selling
-  const totalSellValue = quantity * orderPrice;
+      // Money received from selling
+      const totalSellValue = quantity * orderPrice;
 
-  // Find funds account
-  const funds = await FundsModel.findOne({});
+      // Find funds account
+      const funds = await FundsModel.findOne({
+        user: req.user._id,
+      });
 
-  if (!funds) {
-    return res.status(500).json({
-      message: "Funds account not found",
-    });
-  }
-  funds.availableCash += totalSellValue;
+      if (!funds) {
+        return res.status(500).json({
+          message: "Funds account not found",
+        });
+      }
+      funds.availableCash += totalSellValue;
 
-  const investedAmount = quantity * existingHolding.avg;
+      const investedAmount = quantity * existingHolding.avg;
 
-  funds.usedMargin -= investedAmount;
+      funds.usedMargin -= investedAmount;
 
+      if (funds.usedMargin < 0) {
+        funds.usedMargin = 0;
+      }
 
-  if (funds.usedMargin < 0) {
-    funds.usedMargin = 0;
-  }
+      await funds.save();
 
-  await funds.save();
+      // Update holdings
+      existingHolding.qty -= quantity;
 
-  // Update holdings
-  existingHolding.qty -= quantity;
+      if (existingHolding.qty === 0) {
+        await HoldingsModel.deleteOne({
+          _id: existingHolding._id,
+        });
+      } else {
+        existingHolding.price = orderPrice;
 
-  if (existingHolding.qty === 0) {
-    await HoldingsModel.deleteOne({
-      _id: existingHolding._id,
-    });
-  } else {
-    existingHolding.price = orderPrice;
+        await existingHolding.save();
+      }
 
-    await existingHolding.save();
-  }
-
-  return res.status(201).json({
-    message: "Sell order placed successfully",
-  });
-}
+      return res.status(201).json({
+        message: "Sell order placed successfully",
+      });
+    }
 
     return res.status(400).json({
       message: "Invalid order mode",
     });
-
   } catch (error) {
     console.log("New order error:", error);
 

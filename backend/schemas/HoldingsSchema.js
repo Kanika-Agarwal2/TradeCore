@@ -1,6 +1,12 @@
 const { Schema } = require("mongoose");
 
 const HoldingsSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
+
   name: String,
   qty: Number,
   avg: Number,
