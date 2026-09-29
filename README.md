@@ -1,10 +1,8 @@
 # TradeCore — Full-Stack Stock Trading Platform
 
-TradeCore is a full-stack stock trading simulation platform built with the MERN stack. It provides an authenticated trading dashboard where users can manage funds, place simulated buy/sell orders, track holdings and positions, and monitor portfolio performance through profit/loss calculations.
+TradeCore is a full-stack stock trading simulation platform built with the MERN stack. It combines secure authentication, RESTful APIs, persistent portfolio state, simulated order execution, funds management, and portfolio performance analytics in a modular web application.
 
-The project focuses on implementing a complete full-stack workflow with authentication, REST APIs, database integration, protected routes, trading operations, and dashboard-based portfolio analytics.
-
-> **Note:** TradeCore is an educational trading simulation project. It does not execute real stock-market transactions or provide real brokerage services.
+The platform separates the client-facing landing experience, authenticated trading dashboard, and backend API layer while using MongoDB for persistent users, orders, holdings, positions, and funds data.
 
 ---
 
@@ -39,8 +37,8 @@ The project focuses on implementing a complete full-stack workflow with authenti
 ### 💰 Funds Management
 - Add funds to the simulated trading account
 - Withdraw available funds
-- View available balance
-- Track account equity and used funds
+- Track available balance and used margin
+- View account balance information
 
 ### 📋 Order Management
 - Place simulated buy and sell orders
@@ -49,9 +47,9 @@ The project focuses on implementing a complete full-stack workflow with authenti
 - Track order type, quantity and price
 
 ### 📈 Positions
-- View active trading positions
+- View position data
 - Track quantity and price information
-- Monitor current position data
+- Monitor stored position information
 
 ---
 
@@ -444,7 +442,6 @@ TradeCore/
 │   ├── model/
 │   ├── routes/
 │   ├── schemas/
-│   ├── .env
 │   ├── index.js
 │   └── package.json
 │
@@ -482,20 +479,53 @@ TradeCore/
 
 ---
 
-## 🧩 Engineering Highlights
+## 🧩 Engineering Highlights & Architecture
 
-- Designed a full-stack application using React, Node.js, Express and MongoDB.
-- Implemented RESTful APIs for authentication, funds, orders, holdings and positions.
-- Implemented JWT authentication with HTTP-only cookies.
-- Added protected routes to prevent unauthenticated dashboard access.
-- Integrated MongoDB Atlas for persistent application data.
-- Implemented simulated buy/sell workflows.
-- Implemented holdings and portfolio P/L calculations.
-- Connected frontend components with backend APIs using authenticated requests.
-- Structured the application into separate frontend, dashboard and backend layers.
-- Used reusable React components and React Router for application navigation.
-- Added centralized authentication verification and logout handling.
+- **Modular Application Architecture:** Structured the platform into separate React landing, authenticated dashboard, and Express backend layers.
 
+- **RESTful Backend:** Implemented APIs for authentication, funds management, orders, holdings, positions, and simulated trading operations.
+
+- **Secure Authentication:** Implemented JWT-based authentication using HTTP-only cookies, bcrypt password hashing, authentication middleware, and protected routes.
+
+- **Persistent Application Data:** Integrated Mongoose with MongoDB Atlas to persist users, funds, orders, holdings, and positions.
+
+- **End-to-End Trading Workflow:** Implemented simulated buy/sell workflows where user actions are sent from the React interface to the Express backend, processed through Mongoose, and persisted in MongoDB Atlas.
+
+- **Account & Portfolio State Updates:** Connected trading operations with account-state management so that successful simulated transactions update available funds, order history, and holdings.
+
+- **Portfolio Analytics:** Implemented investment value, current holdings value, profit/loss, and profit/loss percentage calculations from stored holdings data, with portfolio performance represented through dashboard charts.
+
+- **Frontend–Backend Integration:** Connected React components with authenticated backend APIs to fetch and update trading, funds, orders, holdings, and positions data.
+
+- **Component-Based UI:** Used reusable React components and React Router for application navigation and dashboard functionality.
+
+### 🔄 End-to-End Trading Workflow
+
+```text
+User clicks Buy / Sell
+        ↓
+React Trading Interface
+        ↓
+Express REST API
+        ↓
+Mongoose Models
+        ↓
+MongoDB Atlas
+        ↓
+Updated Trading Data
+        ↓
+┌───────────────┬──────────────┬──────────────┐
+↓               ↓              ↓              ↓
+Funds         Orders        Holdings      Positions
+Update        Update         Update        Tracking
+└───────────────┴──────────────┴──────────────┘
+                       ↓
+              Dashboard fetches
+              updated data
+                       ↓
+             Portfolio calculations
+                       ↓
+                 P/L + Chart
 ---
 
 ## 🔒 Security Considerations
@@ -505,7 +535,7 @@ TradeCore includes several basic security practices:
 - Password hashing with bcrypt
 - JWT-based authentication
 - HTTP-only cookies for authentication tokens
-- Protected backend routes
+- Protected authentication verification
 - Authentication middleware
 - CORS configuration for frontend-backend communication
 - Environment variables for database credentials and JWT secrets
@@ -515,15 +545,15 @@ TradeCore includes several basic security practices:
 
 ## 📌 Current Scope
 
-TradeCore is currently designed as a **stock trading simulation platform** for learning and demonstrating full-stack application development.
+TradeCore is currently designed as a stock trading simulation platform for learning and demonstrating full-stack application development.
 
-The project does not represent a registered brokerage platform and does not execute real stock-market transactions.
+> **Disclaimer:** TradeCore is a simulated trading platform intended for software-development and demonstration purposes. It does not execute real stock-market transactions or provide brokerage services.
 
 Market data and trading operations are intended for application/demo purposes.
 
 ---
 
-## 🔮 Future Improvements
+## 🚀 Engineering Roadmap
 
 Potential future improvements include:
 
@@ -535,7 +565,6 @@ Potential future improvements include:
 - Improved portfolio analytics
 - Search and filtering for stocks
 - Responsive dashboard improvements
-- Cloud deployment
 - Automated testing
 - CI/CD integration
 
