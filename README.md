@@ -85,17 +85,14 @@ The platform separates the client-facing landing experience, authenticated tradi
 
 ---
 
-## 🏗️ System Architecture
-
 ```text
                          ┌──────────────────────┐
-                         │      TradeCore       │
                          │   Landing Frontend   │
-                         │     React.js         │
+                         │      React.js        │
+                         │      Port 3000       │
                          └──────────┬───────────┘
                                     │
-                                    │ Authentication
-                                    │ /verify /login
+                                    │ API Requests
                                     ▼
                          ┌──────────────────────┐
                          │      Express.js      │
@@ -104,20 +101,19 @@ The platform separates the client-facing landing experience, authenticated tradi
                          └──────────┬───────────┘
                                     │
                        ┌────────────┴────────────┐
-                       │                         │
                        ▼                         ▼
               ┌─────────────────┐       ┌─────────────────┐
-              │   JWT / Cookie  │       │     MongoDB     │
-              │ Authentication  │       │     Database    │
+              │   JWT / Cookie  │       │  MongoDB Atlas  │
+              │ Authentication  │       │    Database     │
               └─────────────────┘       └─────────────────┘
-                                                │
-                                                │
-                                                ▼
-                                      ┌──────────────────┐
-                                      │ Trading Dashboard│
-                                      │    React.js      │
-                                      │    Port 3001     │
-                                      └──────────────────┘
+                                    ▲
+                                    │ API Requests
+                                    │
+                         ┌──────────┴───────────┐
+                         │ Trading Dashboard   │
+                         │      React.js       │
+                         │      Port 3001      │
+                         └──────────────────────┘
 ```
 
 ---
@@ -233,9 +229,9 @@ Positions
 
 Funds
  │
- ├── Available balance
- ├── Used funds
- └── Account equity
+ ├── Available cash
+ ├── Used margin
+ └── Opening balance
 ```
 
 ---
@@ -485,7 +481,7 @@ TradeCore/
 
 - **RESTful Backend:** Implemented APIs for authentication, funds management, orders, holdings, positions, and simulated trading operations.
 
-- **Secure Authentication:** Implemented JWT-based authentication using HTTP-only cookies, bcrypt password hashing, authentication middleware, and protected routes.
+- **Secure Authentication:** Implemented JWT-based authentication using HTTP-only cookies, bcrypt password hashing, authentication middleware, and protected authentication flows.
 
 - **Persistent Application Data:** Integrated Mongoose with MongoDB Atlas to persist users, funds, orders, holdings, and positions.
 
@@ -526,6 +522,8 @@ Update        Update         Update        Tracking
              Portfolio calculations
                        ↓
                  P/L + Chart
+
+```
 ---
 
 ## 🔒 Security Considerations
