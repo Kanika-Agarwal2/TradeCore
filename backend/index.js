@@ -345,6 +345,7 @@ app.get("/allPositions", authMiddleware, async (req, res) => {
 });
 app.post("/newOrder", authMiddleware, async (req, res) => {
   try {
+    console.log("NEW ORDER HIT:", req.body);
     const { name, qty, price, mode } = req.body;
 
     if (!name || !qty || !price || !mode) {
@@ -423,7 +424,43 @@ app.post("/newOrder", authMiddleware, async (req, res) => {
 
         await newHolding.save();
       }
+      // Update Position
+      let existingPosition = await PositionsModel.findOne({
+        user: req.user._id,
+        name,
+      });
 
+      if (existingPosition) {
+        const oldQty = existingPosition.qty;
+        const oldAvg = existingPosition.avg;
+
+        const newQty = oldQty + quantity;
+
+        const newAvg = (oldQty * oldAvg + quantity * orderPrice) / newQty;
+
+        existingPosition.qty = newQty;
+        existingPosition.avg = newAvg;
+        existingPosition.price = orderPrice;
+        existingPosition.net = "0.00%";
+        existingPosition.day = "0.00%";
+
+        await existingPosition.save();
+      } else {
+        const newPosition = new PositionsModel({
+          user: req.user._id,
+          product: "CNC",
+          name,
+          qty: quantity,
+          avg: orderPrice,
+          price: orderPrice,
+          net: "0.00%",
+          day: "0.00%",
+          isLoss: false,
+        });
+
+        await newPosition.save();
+        // console.log("POSITION SAVED:", newPosition);
+      }
       return res.status(201).json({
         message: "Buy order placed successfully",
       });
@@ -456,7 +493,7 @@ app.post("/newOrder", authMiddleware, async (req, res) => {
       });
 
       await newOrder.save();
-
+      
       // Money received from selling
       const totalSellValue = quantity * orderPrice;
 
