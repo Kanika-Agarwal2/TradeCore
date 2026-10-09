@@ -1,5 +1,5 @@
 import React from "react";
-
+import { DASHBOARD_URL } from "../../config";
 function Hero() {
   return (
     <div className="container p-3 mb-5">
@@ -21,7 +21,7 @@ function Hero() {
         <button
           className="p-2 btn fs-5 mb-5 mt-4 signupBtn"
           onClick={() => {
-            window.location.href = "http://localhost:3000/dashboard";
+            window.location.href = `${DASHBOARD_URL}/`;
           }}
         >
           Get started

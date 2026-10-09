@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { API_URL } from "../../config";
 function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -29,7 +29,7 @@ function Signup() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:3002/signup", {
+      const response = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ function Signup() {
       setMessage("Signup successful! Redirecting...");
 
       setTimeout(() => {
-        window.location.href = "http://localhost:3000/";
+        window.location.href = "/";
       }, 1000);
     } catch (error) {
       console.log(error);

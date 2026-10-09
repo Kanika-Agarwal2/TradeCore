@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { API_URL } from "../../config";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,17 +20,17 @@ function Login() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:3002/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+     const response = await fetch(`${API_URL}/login`, {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       credentials: "include",
+       body: JSON.stringify({
+         email,
+         password,
+       }),
+     });
 
       const data = await response.json();
 
@@ -39,7 +39,7 @@ function Login() {
         return;
       }
 
-      window.location.replace("http://localhost:3000/");
+      window.location.replace("/");
     } catch (error) {
       console.log("LOGIN ERROR:", error);
       setError("Unable to connect to server");

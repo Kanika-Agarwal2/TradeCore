@@ -1,4 +1,5 @@
 import React from "react";
+import { DASHBOARD_URL } from "../../config";
 function Stats() {
   return (
     <div className="container p-2">
@@ -46,7 +47,7 @@ function Stats() {
               Explore TradeCore <i class="fa-solid fa-arrow-right-long"></i>
             </a>
 
-            <a href="http://localhost:3001" className="fs-5 aBtn">
+            <a href={DASHBOARD_URL} className="fs-5 aBtn">
               Open dashboard <i className="fa-solid fa-arrow-right-long"></i>
             </a>
           </div>
