@@ -5,7 +5,7 @@ function Hero() {
     <div className="container p-3 mb-5">
       <div className="row text-center">
         <img
-          src="media/images/p1.png"
+          src="Media/images/p1.png"
           alt="Hero Image"
           className="mb-5 mt-5 mx-auto"
           style={{ width: "65%" }}
