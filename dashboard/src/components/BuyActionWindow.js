@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { API_URL } from "./config";
+import { API_URL } from "../config";
 import { Link } from "react-router-dom";
 import axios from "axios";
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BuyActionWindow from "./BuyActionWindow";
 import SellActionWindow from "./SellActionWindow";
-import { API_URL } from "./config";
+import { API_URL } from "../config";
 const GeneralContext = React.createContext({
   username: "",
   openBuyWindow: (uid, price) => {},

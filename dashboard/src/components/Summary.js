@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
-import { API_URL } from "./config";
+import { API_URL } from "../config";
 const Summary = () => {
   const { username } = useContext(GeneralContext);
 
