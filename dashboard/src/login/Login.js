@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Login.css";
-
+import { API_URL, FRONTEND_URL } from "./config";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +21,7 @@ function Login() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:3002/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,7 +40,7 @@ function Login() {
         return;
       }
 
-      window.location.href = "http://localhost:3001/";
+      window.location.href = "/";
     } catch (error) {
       console.log("LOGIN ERROR:", error);
       setError(error.message);
@@ -89,7 +89,7 @@ function Login() {
       {/* Signup */}
       <p className="signup-text">
         Don't have an account?{" "}
-        <a href="http://localhost:3000/signup">Sign up for free!</a>
+        <a href={`${FRONTEND_URL}/signup`}>Sign up for free!</a>
       </p>
 
       <p className="demo-text">TradeCore Trading Platform</p>

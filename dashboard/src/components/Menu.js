@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { API_URL } from "./config";
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
 
@@ -14,7 +14,7 @@ const Menu = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost:3002/logout",
+        `${API_URL}/logout`,
         {},
         {
           withCredentials: true,

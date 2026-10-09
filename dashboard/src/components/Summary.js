@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import GeneralContext from "./GeneralContext";
-
+import { API_URL } from "./config";
 const Summary = () => {
   const { username } = useContext(GeneralContext);
 
@@ -12,10 +12,10 @@ const Summary = () => {
     const fetchSummaryData = async () => {
       try {
         const [fundsResponse, holdingsResponse] = await Promise.all([
-          axios.get("http://localhost:3002/allFunds", {
+          axios.get(`${API_URL}/allFunds`, {
             withCredentials: true,
           }),
-          axios.get("http://localhost:3002/allHoldings", {
+          axios.get(`${API_URL}/allHoldings`, {
             withCredentials: true,
           }),
         ]);

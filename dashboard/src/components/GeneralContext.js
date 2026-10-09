@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BuyActionWindow from "./BuyActionWindow";
 import SellActionWindow from "./SellActionWindow";
-
+import { API_URL } from "./config";
 const GeneralContext = React.createContext({
   username: "",
   openBuyWindow: (uid, price) => {},
@@ -18,7 +18,7 @@ export const GeneralContextProvider = (props) => {
   const [selectedStockUID, setSelectedStockUID] = useState("");
   const [selectedStockPrice, setSelectedStockPrice] = useState("");
   useEffect(() => {
-    fetch("http://localhost:3002/verify", {
+    fetch(`${API_URL}/verify`, {
       method: "GET",
       credentials: "include",
     })

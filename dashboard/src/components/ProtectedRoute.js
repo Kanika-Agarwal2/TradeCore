@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-
+import { API_URL } from "./config";
 function ProtectedRoute({ children }) {
   const [loading, setLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
@@ -8,7 +8,7 @@ function ProtectedRoute({ children }) {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const response = await fetch("http://localhost:3002/verify", {
+        const response = await fetch(`${API_URL}/verify`, {
           method: "GET",
           credentials: "include",
         });

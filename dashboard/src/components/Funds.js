@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { API_URL } from "./config";
 import { Link } from "react-router-dom";
 import "./Funds.css";
 import axios from "axios";
@@ -11,7 +12,7 @@ const Funds = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/allFunds", {
+      .get(`${API_URL}/allFunds`, {
         withCredentials: true,
       })
       .then((res) => {

@@ -19,7 +19,7 @@ const Dashboard = () => {
       } catch (error) {
         console.log("Authentication check error:", error);
 
-        window.location.replace(`${DASHBOARD_URL}/login`);
+        window.location.replace(`${DASHBOARD_URL}/`);
       }
     };
 
